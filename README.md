@@ -9,6 +9,7 @@ Key features of CSRF_POC_Generate may include:
    
 Security professionals can leverage CSRF_POC_Generate to assess the effectiveness of CSRF protections implemented within web applications. By identifying and exploiting vulnerabilities, users can recommend appropriate countermeasures to mitigate CSRF risks and enhance the overall security posture of web applications. However, it's important to note that CSRF_POC_Generate should only be used for ethical and lawful security testing purposes with proper authorization. Misuse of this tool for unauthorized activities is strictly prohibited.
 
+![image](https://github.com/M4xIq/CSRF_POC_Generate/assets/79747792/89a10a09-bd50-47b8-8d83-4ad41cc3e8ce)
 
 
 
