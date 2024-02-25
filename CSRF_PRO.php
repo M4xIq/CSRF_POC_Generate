@@ -1,3 +1,6 @@
+<?php
+ob_start(); // Start output buffering
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -193,3 +196,6 @@ function copyJSON() {
 
 </body>
 </html>
+<?php
+ob_end_flush(); // Flush output buffer and send the content to the browser
+?>
