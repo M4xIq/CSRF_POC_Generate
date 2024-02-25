@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSRF_PRO</title>
+<title>Split Page</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -85,36 +85,47 @@
         font-family: Consolas, monospace;
         font-size: 14px;
     }
+
+    footer {
+        background-color: #EAECEE;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+    }
 </style>
 </head>
 <body>
 
 <div class="container">
     <div class="left">
-                <h1>CSRF PoC Generator</h1>
+        <h1>CSRF PoC Generator</h1>
 
         <?php
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $action_url = isset($_POST['action_url']) ? $_POST['action_url'] : '';
-            $fields_json = isset($_POST['fields']) ? $_POST['fields'] : '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $action_url = isset($_POST['action_url']) ? $_POST['action_url'] : '';
+    $fields_json = isset($_POST['fields']) ? $_POST['fields'] : '';
 
-            $fields = json_decode($fields_json, true);
+    $fields = json_decode($fields_json, true);
 
-            if ($fields === null) {
-                echo "<p>Error: Invalid JSON format.</p>";
-            } else {
-                echo "<h2>CSRF PoC:</h2>\n";
-                echo "<form id='csrf_form' action='" . htmlspecialchars($action_url) . "' method='POST'>\n";
-                foreach ($fields as $name => $value) {
-                    echo "<input type='hidden' name='" . htmlspecialchars($name) . "' value='" . htmlspecialchars($value) . "'>\n";
-                }
-                echo "</form>\n";
-                echo "<script>document.getElementById('csrf_form').submit();</script>";
-            }
+    if ($fields === null) {
+        echo "<p>Error: Invalid JSON format.</p>";
+    } else {
+        $html_content = "<form id='csrf_form' action='" . htmlspecialchars($action_url) . "' method='POST'>\n";
+        foreach ($fields as $name => $value) {
+            $html_content .= "<input type='hidden' name='" . htmlspecialchars($name) . "' value='" . htmlspecialchars($value) . "'>\n";
         }
-        ?>
+        $html_content .= "</form>\n<script>document.getElementById('csrf_form').submit();</script>\n</html>";
 
-        <form method="post">
+        // Set headers for download
+        header('Content-Disposition: attachment; filename="csrf_poc.html"');
+        header('Content-Length: ' . strlen($html_content));
+        echo $html_content;
+        exit;
+    }
+}
+?>
+
+       <form method="post">
             <label for="action_url">Web URL:</label><br>
             <input type="text" id="action_url" name="action_url" required><br>
 
@@ -122,14 +133,12 @@
             </label><br>
 <textarea id="fields" name="fields" rows="5" cols="50" required="" style="width: 565px; height: 567px;"></textarea>
 
-            <button type="submit" style="margin-bottom:10px;">Exploit</button>
-
-</style>        </form>
+            <button type="submit" style="margin-bottom:10px;">Download POC File </button>
+        </form>
 
     </div>
-    <div class="right" >
+    <div class="right">
         <h1>Convert HTTP Query String to JSON</h1>
-
 
         <form method="post">
             <label for="query_string">Enter HTTP Query String:</label><br>
@@ -138,7 +147,7 @@
             <button type="submit">Convert to JSON</button>
         </form>
 
-        <div class="result">
+        <div class="result" id="jsonResult">
             <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $query_string = isset($_POST['query_string']) ? $_POST['query_string'] : '';
@@ -155,18 +164,32 @@
             }
             ?>
         </div>
+
+        <button class="copy-btn" onclick="copyJSON()">Copy JSON</button>
     </div>
 </div>
 
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<body>
 <footer>
   <p>
-<a href="https://www.facebook.com/im4xx">Ahmed Najeh></a><br>
+<a href="https://www.facebook.com/im4xx">Ahmed Najeh</a><br>
 <a href="mailto:im4xiq@gmail.com">im4xiq@gmail.com</a></p>
 </footer>
+
+<script>
+function copyJSON() {
+    var jsonResult = document.getElementById('jsonResult');
+    var jsonContent = jsonResult.querySelector('pre').innerText;
+
+    var tempInput = document.createElement('textarea');
+    tempInput.value = jsonContent;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+
+    alert('JSON content copied to clipboard!');
+}
+</script>
+
 </body>
 </html>
