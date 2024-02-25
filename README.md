@@ -15,3 +15,5 @@ Security professionals can leverage CSRF_POC_Generate to assess the effectivenes
 
 https://github.com/M4xIq/CSRF_POC_Generate/assets/79747792/88b7abf7-e322-469b-934e-d1078449e1ca
 
+Live web 
+https://cpgpro.000webhostapp.com/
